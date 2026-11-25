@@ -76,6 +76,12 @@ def main():
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8", newline="") as f:
         f.write(TEXT)
+    # Read back what was written: the gate judges the file's exact bytes,
+    # so refuse to finish silently if the write did not round-trip.
+    with open("/output/entry.txt", encoding="utf-8", newline="") as f:
+        written = f.read()
+    assert written == TEXT, "entry.txt does not match the chosen text"
+    assert 1 <= len(written) <= 200, "entry.txt fails the 1-200 char gate"
 
 
 if __name__ == "__main__":
